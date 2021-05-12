@@ -12,6 +12,7 @@ PORT = 10086
 
 url_patterns = [
     (r'/file/.+?', file_show_handler),
+    (r'/file', file_show_handler),
     (r'/edit', file_edit_handler),
     (r'/read', file_read_handler)
 ]

@@ -20,13 +20,18 @@ class file_show_handler(RequestHandler):
 
 class file_show_module():
     def __init__(self, path):
+        if not path:
+            path = '/'
         self.path = path
 
     def show(self):
-        target_files = []
-        for file in os.listdir(self.path):
-            file = os.path.join(self.path, file)
-            target_files.append(
-                file_info(file, user='root')
-            )
-        return dict(code=0, list=target_files)
+        try:
+            target_files = []
+            for file in os.listdir(self.path):
+                file = os.path.join(self.path, file)
+                target_files.append(
+                    file_info(file, user='root')
+                )
+            return dict(code=0, list=target_files)
+        except Exception as e:
+            return {'code':-1,'msg':'dir not found'}
