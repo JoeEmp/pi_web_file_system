@@ -1,4 +1,5 @@
 from tornado.web import RequestHandler, MissingArgumentError
+from handlers.base_handler import UNKNOW_ERROR
 import os
 from utils import file_info
 import logging
@@ -20,7 +21,7 @@ class file_edit_handler(RequestHandler):
             self.finish({'code': 1, 'msg': '%s不能为空' % e.arg_name})
         except Exception as e:
             logging.error(e)
-            self.finish({"code": -1, 'msg': '未知错误'})
+            self.finish(UNKNOW_ERROR)
 
 
 class file_edit_module():
