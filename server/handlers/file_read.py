@@ -1,10 +1,12 @@
-from tornado.web import RequestHandler, MissingArgumentError
+from handlers.base_handler import base_handler
+from com.pi_error import pi_exception, UNKNOW_ERROR
+from tornado.web import MissingArgumentError
 import os
-from utils import file_info
+from com.utils import file_info
 import logging
 
 
-class file_read_handler(RequestHandler):
+class file_read_handler(base_handler):
     def initialize(self, ser=None):
         if not ser:
             self.ser = file_read_module()
@@ -13,13 +15,18 @@ class file_read_handler(RequestHandler):
 
     def post(self):
         try:
+            self.is_login()
             path = self.get_argument('path')
             self.finish(self.ser.read(path))
         except MissingArgumentError as e:
             self.finish({'code': 1, 'msg': '%s不能为空' % e.arg_name})
+        except pi_exception as e:
+            self.finish(e.reason)
+        except IsADirectoryError as e:
+            self.finish(self.warn_tips(msg='目录无法读取'))
         except Exception as e:
-            logging.error(e)
-            self.finish({"code": -1, 'msg': '未知错误'})
+            logging.error(type(e))
+            self.finish(UNKNOW_ERROR)
 
 
 class file_read_module():

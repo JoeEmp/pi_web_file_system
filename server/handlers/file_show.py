@@ -1,9 +1,12 @@
 from tornado.web import RequestHandler, MissingArgumentError
 import os
-from utils import file_info
+from com.utils import file_info
+from com.pi_error import pi_exception, UNKNOW_ERROR
+from handlers.base_handler import base_handler
+import logging
 
 
-class file_show_handler(RequestHandler):
+class file_show_handler(base_handler):
     def initialize(self, ser=None):
         if not ser:
             self.ser = file_show_module(self.request.uri.replace('/file', ''))
@@ -11,11 +14,14 @@ class file_show_handler(RequestHandler):
             self.ser = ser
 
     def get(self):
-        # print(__file__)
-        # if self.request.uri.replace('/file', '') in os.path.abspath(os.path.dirname(__file__)):
-        #     self.finish({'code':-1,"msg":'can\'t edit project dir'})
-        # else:
-        self.finish(self.ser.show())
+        try:
+            self.is_login()
+            self.finish(self.ser.show())
+        except pi_exception as e:
+            self.finish(e.reason)
+        except Exception as e:
+            logging.error(e)
+            self.finish(UNKNOW_ERROR)
 
 
 class file_show_module():
@@ -34,4 +40,4 @@ class file_show_module():
                 )
             return dict(code=0, list=target_files)
         except Exception as e:
-            return {'code':-1,'msg':'dir not found'}
+            return {'code': -1, 'msg': 'dir not found'}

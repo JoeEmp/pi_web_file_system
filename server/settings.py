@@ -21,3 +21,9 @@ logging.basicConfig(
     **log_config[ENV]
 )
 
+SALT = 'pi'
+if not SALT:
+    raise ValueError('your have to set SALT')
+
+USERNAME = 'pi'
+PASSWORD = 'raspberry'

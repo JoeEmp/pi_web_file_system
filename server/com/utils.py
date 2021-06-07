@@ -1,6 +1,10 @@
 import os
 import pwd
 import stat
+import jwt
+from time import time
+from settings import SALT
+from com.pi_error import pi_exception, UNKNOW_ERROR
 
 
 def file_info(file, user):
@@ -44,3 +48,21 @@ def get_user(user):
         "uid": user_info.pw_passwd,
         "gid": user_info.pw_gid
     }
+
+
+def gen_token(username):
+    """get token. """
+    global SALT
+    headers = {"alg": "HS256"}
+    payload = {"username": username, 'exp': time()+(3600*24*1)}
+    token = jwt.encode(payload=payload, key=SALT,
+                       algorithm='HS256', headers=headers).decode('utf-8')
+    return token
+
+
+def sync_token(token):
+    global SALT
+    try:
+        return jwt.decode(token, SALT, True, algorithm='HS256')
+    except Exception as e:
+        raise pi_exception(UNKNOW_ERROR)

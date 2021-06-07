@@ -7,9 +7,6 @@ import os
 from settings import PORT
 from urls import url_patterns
 
-
-
-
 def make_app(is_debug=False):
     return Application(
         url_patterns,
@@ -33,6 +30,7 @@ def debug_main():
     IOLoop.current().start()
     print('start server')
     print('-'*80)
+
 
 
 if __name__ == "__main__":

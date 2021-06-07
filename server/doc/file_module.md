@@ -8,10 +8,11 @@
 
 method : get
 
-param
-|参数名|参数类型|是否必传|备注|
-|-|-|-|-|
-|-|-|-|-|
+headers
+
+| 参数名 | 参数类型 | 是否必传 | 备注 |
+| ------ | -------- | -------- | ---- |
+| token  | str      | 是       | -    |
 
 &emsp;
 
@@ -64,6 +65,12 @@ method : get
 
 &emsp;
 
+headers
+
+| 参数名 | 参数类型 | 是否必传 | 备注 |
+| ------ | -------- | -------- | ---- |
+| token  | str      | 是       | -    |
+
 请求(request case)
 
 ```js
@@ -99,6 +106,12 @@ request(options, function (error, response) {
 
 method : post
 
+headers
+
+| 参数名 | 参数类型 | 是否必传 | 备注 |
+| ------ | -------- | -------- | ---- |
+| token  | str      | 是       | -    |
+
 param
 |参数名|参数类型|是否必传|备注|
 |-|-|-|-|
@@ -110,16 +123,22 @@ param
 请求(request case)
 
 ```js
-var request = require("request");
-var options = {
-  method: "POST",
-  url: "http://localhost:10086/edit?path=/Users/joe/is_root.txt&text=hello",
-  headers: {},
-};
-request(options, function (error, response) {
-  if (error) throw new Error(error);
-  console.log(response.body);
+var data = new FormData();
+data.append("text", "is_root111");
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
 });
+
+xhr.open("POST", "http://localhost/edit?path={path}");
+xhr.setRequestHeader("token", "1234");
+
+xhr.send(data);
 ```
 
 响应(response case)
@@ -134,6 +153,12 @@ request(options, function (error, response) {
 
 method : post
 
+headers
+
+| 参数名 | 参数类型 | 是否必传 | 备注 |
+| ------ | -------- | -------- | ---- |
+| token  | str      | 是       | -    |
+
 param
 |参数名|参数类型|是否必传|备注|
 |-|-|-|-|
@@ -144,16 +169,19 @@ param
 请求(request case)
 
 ```js
-var request = require("request");
-var options = {
-  method: "POST",
-  url: "http://localhost:10086/read?path=/Users/joe/is_root.txt",
-  headers: {},
-};
-request(options, function (error, response) {
-  if (error) throw new Error(error);
-  console.log(response.body);
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
 });
+
+xhr.open("POST", "http://localhost/read?path={path}");
+xhr.setRequestHeader("token", "");
+
+xhr.send();
 ```
 
 响应(response case)
