@@ -5,6 +5,7 @@ import jwt
 from time import time
 from settings import SALT
 from com.pi_error import pi_exception, UNKNOW_ERROR
+import logging
 
 
 def file_info(file, user):
@@ -56,13 +57,14 @@ def gen_token(username):
     headers = {"alg": "HS256"}
     payload = {"username": username, 'exp': time()+(3600*24*1)}
     token = jwt.encode(payload=payload, key=SALT,
-                       algorithm='HS256', headers=headers).decode('utf-8')
+                       algorithm='HS256', headers=headers)
     return token
 
 
 def sync_token(token):
     global SALT
     try:
-        return jwt.decode(token, SALT, True, algorithm='HS256')
+        return jwt.decode(token, key=SALT, verify=True, algorithms=['HS256'])
     except Exception as e:
+        logging.error(e)
         raise pi_exception(UNKNOW_ERROR)
