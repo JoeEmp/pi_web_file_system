@@ -11,6 +11,12 @@ class base_handler(RequestHandler):
             self.set_header('Content-type', 'application/json; charset=utf-8')
         return super().finish(chunk=chunk)
 
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*") 
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        return super().set_default_headers()
+
     def is_login(self):
         """return payload or raise pi_exception use handler error """
         token = self.request.headers.get('token', None)
