@@ -108,3 +108,5 @@ __pycache__
 tmp.py
 nohup*
 .DS_Store
+token.txt
+.vscode
