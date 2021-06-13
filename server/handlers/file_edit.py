@@ -32,6 +32,8 @@ class file_edit_module():
 
     def edit(self, path, text):
         try:
+            if not os.path.exists(path):
+                raise FileNotFoundError
             with open(path, 'w') as f:
                 f.write(text)
             return dict(code=0)

@@ -22,9 +22,9 @@ class login_handler(base_handler):
         """return token or error msg. """
         if username == USERNAME and password == PASSWORD:
             return self.base_tips(token=gen_token(username))
-        elif username == USERNAME:
+        elif username != USERNAME:
             return self.warn_tips(msg="不存在该用户")
-        elif password == PASSWORD:
+        elif password != PASSWORD:
             return self.warn_tips(msg="密码错误")
         else:
             return UNKNOW_ERROR

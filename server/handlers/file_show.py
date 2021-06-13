@@ -40,4 +40,4 @@ class file_show_module():
                 )
             return dict(code=0, list=target_files)
         except Exception as e:
-            return {'code': -1, 'msg': 'dir not found'}
+            return {'code': -1, 'msg': '目录不存在'}
